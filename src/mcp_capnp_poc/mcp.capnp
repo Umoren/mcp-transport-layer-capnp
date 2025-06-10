@@ -1,4 +1,4 @@
-@0xf368c6beec08ed07;
+@0xbb4471d26387f4ba;
 
 # Tool definition - what the server can do
 struct ToolDef {

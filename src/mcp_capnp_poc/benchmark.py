@@ -98,7 +98,7 @@ class CapnProtoGitHubClient:
         )
 
 class JsonRpcGitHubClient:
-    """JSON-RPC client for comparison with existing server."""
+    """JSON-RPC client for comparison with HTTP server."""
     
     def __init__(self, base_url="http://localhost:8001"):
         self.base_url = base_url
@@ -111,9 +111,10 @@ class JsonRpcGitHubClient:
         try:
             async with self.session.get(f"{self.base_url}/health") as response:
                 if response.status != 200:
-                    raise Exception("JSON-RPC server not responding")
+                    raise Exception("HTTP MCP server not responding")
+                print("[BENCHMARK] Connected to HTTP MCP server")
         except Exception as e:
-            raise Exception(f"Cannot connect to JSON-RPC server: {e}")
+            raise Exception(f"Cannot connect to HTTP MCP server: {e}")
     
     async def disconnect(self):
         if self.session:
@@ -184,7 +185,7 @@ class JsonRpcGitHubClient:
             "params": {
                 "name": "get_github_issue",
                 "arguments": {
-                    "number": number
+                    "issue_number": number
                 }
             }
         }

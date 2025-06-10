@@ -18,13 +18,21 @@ echo "Environment configured:"
 echo "  GITHUB_REPO: $GITHUB_REPO"
 echo "  GITHUB_TOKEN: ${GITHUB_TOKEN:0:8}..."
 
-# Start Cap'n Proto server in background
+# Start HTTP GitHub server in background
 echo ""
+echo "Starting HTTP GitHub MCP server..."
+python src/mcp_capnp_poc/github_http_server.py &
+HTTP_PID=$!
+
+# Wait for HTTP server to start
+sleep 3
+
+# Start Cap'n Proto server in background
 echo "Starting Cap'n Proto GitHub server..."
 python src/mcp_capnp_poc/github_server.py &
 CAPNP_PID=$!
 
-# Wait for server to start
+# Wait for Cap'n Proto server to start
 sleep 3
 
 # Run benchmark
@@ -35,6 +43,7 @@ python src/mcp_capnp_poc/benchmark.py
 # Cleanup
 echo ""
 echo "Cleaning up..."
+kill $HTTP_PID 2>/dev/null || true
 kill $CAPNP_PID 2>/dev/null || true
 
 echo "Benchmark complete."

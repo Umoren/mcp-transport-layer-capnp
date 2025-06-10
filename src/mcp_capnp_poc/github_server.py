@@ -94,7 +94,7 @@ class GitHubMcpServerImpl(github_schema.GitHubMcpServer.Server):
                 for issue_data in issues_data:
                     issue = self._create_github_issue(issue_data)
                     issues_list.append(issue)
-                
+
                 context.results.issues = issues_list
     
     async def getIssue_context(self, context, **kwargs):
@@ -110,7 +110,7 @@ class GitHubMcpServerImpl(github_schema.GitHubMcpServer.Server):
                 'Accept': 'application/vnd.github.v3+json'
             }
             
-            async with session.get(f"{self.repo_url}/issues/{number}", 
+            async with session.get(f"{self.repo_url}/issues/{number}",
                                  headers=headers) as response:
                 if response.status != 200:
                     raise Exception(f"GitHub API error: {response.status}")
@@ -124,7 +124,7 @@ class GitHubMcpServerImpl(github_schema.GitHubMcpServer.Server):
     async def ping_context(self, context, **kwargs):
         """Health check."""
         context.results.pong = f"GitHub MCP Server - {self.github_repo}"
-    
+
     def _create_github_issue(self, issue_data):
         """Convert GitHub API response to Cap'n Proto GitHubIssue."""
         issue = github_schema.GitHubIssue.new_message()
